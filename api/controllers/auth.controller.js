@@ -37,3 +37,22 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const googleAuth = async (req, res) => {
+  const userData = req.body;
+  const searchUser = await User.findOne({email: userData.email});
+  if (searchUser) {
+    generateToken(res, searchUser);
+  } else {
+    const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+    const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+    const newUser = new User({
+      username: userData.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-8),
+      email: userData.email,
+      password: hashedPassword,
+      avatar: userData.photoUrl
+    })
+    await newUser.save();
+    generateToken(res, newUser);
+  }
+}

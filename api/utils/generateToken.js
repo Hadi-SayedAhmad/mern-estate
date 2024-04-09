@@ -8,8 +8,11 @@ const generateToken = (res, validUser) => {
     })
     .json({
       _id: validUser._id,
-      name: validUser.username,
+      username: validUser.username,
       email: validUser.email,
+      avatar: validUser.avatar,
+      createdAt: validUser.createdAt,
+      updatedAt: validUser.updatedAt
     });
 };
 
