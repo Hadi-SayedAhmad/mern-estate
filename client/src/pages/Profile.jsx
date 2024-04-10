@@ -6,13 +6,18 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserFailure, updateUserSuccess, updateUserStart } from "../state/user/user.slice";
 export default function Profile() {
-  const { currentUser, loading } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const [ formData, setFormData ] = useState({});
   const [ file, setFile ] = useState(undefined);
   const [ filePerc, setFilePerc ] = useState(0);
   const [ fileUploadError, setFileUploadError ] = useState(false);
+  const [ updateSuccess, setUpdateSuccess ] = useState(false);
+
+
+  const dispatch = useDispatch()
 
   const fileRef = useRef(null);
 
@@ -29,6 +34,7 @@ export default function Profile() {
       ...formData,
       [e.target.id]: e.target.value,
     });
+    
   };
 
   const handleFileUpload =  (file) => {
@@ -61,10 +67,40 @@ export default function Profile() {
     );
   };
 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const call = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+      const response = await call.json();
+      if (response.success === false) {
+        dispatch(updateUserFailure(response.message))
+        return;
+      }
+      dispatch(updateUserSuccess(response));
+      setUpdateSuccess(true);
+      //putting password field as empty again.
+      e.target[3].value = null
+      setFormData({})
+      
+
+    } catch (error) {
+      dispatch(updateUserFailure(error.message))
+    }
+  }
+
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Your Profile</h1>
-      <form className="flex flex-col gap-3">
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type="file"
@@ -94,7 +130,7 @@ export default function Profile() {
           )}
         </p>
         <input
-          value={formData.username}
+          
           defaultValue={currentUser.username}
           type="text"
           placeholder="Username"
@@ -103,7 +139,7 @@ export default function Profile() {
           onChange={handleChange}
         />
         <input
-          value={formData.email}
+          
           defaultValue={currentUser.email}
           type="email"
           placeholder="Email"
@@ -112,6 +148,7 @@ export default function Profile() {
           onChange={handleChange}
         />
         <input
+          
           type="password"
           placeholder="Password"
           className="border p-3 rounded-lg outline-none "
@@ -124,14 +161,16 @@ export default function Profile() {
         >
           {loading ? "Updating..." : "Update"}
         </button>
-        {/* <Link className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95" to={"/create-listing"}>
+        {/* <Link className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95" >
           Create Listing
         </Link> */}
       </form>
-      {/* <div className="flex justify-between mt-5">
-        <span onClick={handleDelete} className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
-        <span onClick={handleSignOut} className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
-      </div> */}
+      <div className="flex justify-between mt-5">
+        <span  className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
+        <span  className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
+      </div>
+      <p className="text-red-700 mt-5">{error && error}</p>
+      <p className="text-green-700 mt-5">{updateSuccess && "Your profile has been updated successfully!"}</p>
     </div>
   );
 }
