@@ -17,7 +17,7 @@ import {
   deleteUserSuccess,
   signOutFailure,
   signOutStart,
-  signOutSuccess
+  signOutSuccess,
 } from "../state/user/user.slice";
 
 export default function Profile() {
@@ -204,7 +204,13 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span
-          onClick={handleDeleteUser}
+          onClick={() => {
+            if (
+              confirm("Are you sure that you want to delete your account?")
+            ) {
+              handleDeleteUser();
+            }
+          }}
           className="text-red-700 cursor-pointer hover:opacity-95"
         >
           Delete Account
