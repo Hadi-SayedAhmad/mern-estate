@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import {
   getDownloadURL,
   getStorage,
@@ -7,7 +8,10 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserFailure, updateUserSuccess, updateUserStart } from "../state/user/user.slice";
+import { updateUserFailure, updateUserSuccess, updateUserStart, deleteUserFailure, deleteUserStart, deleteUserSuccess } from "../state/user/user.slice";
+
+
+
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [ formData, setFormData ] = useState({});
@@ -18,11 +22,11 @@ export default function Profile() {
 
 
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const fileRef = useRef(null);
 
   
-  console.log(formData);
+  
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -96,6 +100,24 @@ export default function Profile() {
     }
   }
 
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const call = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      })
+      const response = await call.json();
+      if (response.success === false) {
+        dispatch(deleteUserFailure(response.message));
+        return;
+      }
+
+      dispatch(deleteUserSuccess());
+      navigate('/');
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -166,7 +188,7 @@ export default function Profile() {
         </Link> */}
       </form>
       <div className="flex justify-between mt-5">
-        <span  className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
+        <span onClick={handleDeleteUser}  className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
         <span  className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
       </div>
       <p className="text-red-700 mt-5">{error && error}</p>

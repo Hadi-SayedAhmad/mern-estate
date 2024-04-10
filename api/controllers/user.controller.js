@@ -32,7 +32,7 @@ export const deleteUser = async (req, res, next) => {
     }
     try {
         await User.findByIdAndDelete({_id: req.user.id})
-        res.status(200).json("Profile has been deleted successfully!");
+        res.clearCookie('jwt').status(200).json("Profile has been deleted successfully!");
     } catch (error) {
         next(error)
     }
