@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -8,25 +8,30 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUserFailure, updateUserSuccess, updateUserStart, deleteUserFailure, deleteUserStart, deleteUserSuccess } from "../state/user/user.slice";
-
-
+import {
+  updateUserFailure,
+  updateUserSuccess,
+  updateUserStart,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signOutFailure,
+  signOutStart,
+  signOutSuccess
+} from "../state/user/user.slice";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
-  const [ formData, setFormData ] = useState({});
-  const [ file, setFile ] = useState(undefined);
-  const [ filePerc, setFilePerc ] = useState(0);
-  const [ fileUploadError, setFileUploadError ] = useState(false);
-  const [ updateSuccess, setUpdateSuccess ] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [file, setFile] = useState(undefined);
+  const [filePerc, setFilePerc] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const fileRef = useRef(null);
 
-  
-  
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -38,14 +43,13 @@ export default function Profile() {
       ...formData,
       [e.target.id]: e.target.value,
     });
-    
   };
 
-  const handleFileUpload =  (file) => {
+  const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
-    const uploadTask =  uploadBytesResumable(storageRef, file);
+    const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       "state-changed",
       (snapshot) => {
@@ -71,7 +75,6 @@ export default function Profile() {
     );
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -79,33 +82,31 @@ export default function Profile() {
       const call = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       const response = await call.json();
       if (response.success === false) {
-        dispatch(updateUserFailure(response.message))
+        dispatch(updateUserFailure(response.message));
         return;
       }
       dispatch(updateUserSuccess(response));
       setUpdateSuccess(true);
       //putting password field as empty again.
-      e.target[3].value = null
-      setFormData({})
-      
-
+      e.target[3].value = null;
+      setFormData({});
     } catch (error) {
-      dispatch(updateUserFailure(error.message))
+      dispatch(updateUserFailure(error.message));
     }
-  }
+  };
 
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
       const call = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
-      })
+      });
       const response = await call.json();
       if (response.success === false) {
         dispatch(deleteUserFailure(response.message));
@@ -113,11 +114,28 @@ export default function Profile() {
       }
 
       dispatch(deleteUserSuccess());
-      navigate('/');
+      navigate("/");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
-  }
+  };
+
+  const handleSignOutUser = async () => {
+    try {
+      dispatch(signOutStart());
+      const call = await fetch("/api/auth/signout");
+      const response = await call.json();
+      if (response.success === false) {
+        dispatch(signOutFailure(response.message));
+        return;
+      }
+      dispatch(signOutSuccess());
+      navigate("/");
+    } catch (error) {
+      console.log(error.message);
+      dispatch(signOutFailure(error.message));
+    }
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -152,7 +170,6 @@ export default function Profile() {
           )}
         </p>
         <input
-          
           defaultValue={currentUser.username}
           type="text"
           placeholder="Username"
@@ -161,7 +178,6 @@ export default function Profile() {
           onChange={handleChange}
         />
         <input
-          
           defaultValue={currentUser.email}
           type="email"
           placeholder="Email"
@@ -170,7 +186,6 @@ export default function Profile() {
           onChange={handleChange}
         />
         <input
-          
           type="password"
           placeholder="Password"
           className="border p-3 rounded-lg outline-none "
@@ -188,11 +203,23 @@ export default function Profile() {
         </Link> */}
       </form>
       <div className="flex justify-between mt-5">
-        <span onClick={handleDeleteUser}  className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
-        <span  className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer hover:opacity-95"
+        >
+          Delete Account
+        </span>
+        <span
+          onClick={handleSignOutUser}
+          className="text-red-700 cursor-pointer hover:opacity-95"
+        >
+          Sign Out
+        </span>
       </div>
       <p className="text-red-700 mt-5">{error && error}</p>
-      <p className="text-green-700 mt-5">{updateSuccess && "Your profile has been updated successfully!"}</p>
+      <p className="text-green-700 mt-5">
+        {updateSuccess && "Your profile has been updated successfully!"}
+      </p>
     </div>
   );
 }

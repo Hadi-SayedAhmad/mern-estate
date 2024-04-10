@@ -56,3 +56,12 @@ export const googleAuth = async (req, res) => {
     generateToken(res, newUser);
   }
 }
+
+export const signOut = (req, res, next) => {
+  try {
+    res.clearCookie("jwt").status(200).json("Signed out successfully!");
+  } catch (error) {
+    next(error)
+  }
+  
+}
