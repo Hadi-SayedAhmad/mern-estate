@@ -33,10 +33,6 @@ const listingSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    petsAllowed: {
-        type: Boolean,
-        required: true
-    },
     parking: {
         type: Boolean,
         required: true
