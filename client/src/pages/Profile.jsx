@@ -19,7 +19,7 @@ import {
   signOutStart,
   signOutSuccess,
 } from "../state/user/user.slice";
-
+import { Link } from "react-router-dom";
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
@@ -198,9 +198,9 @@ export default function Profile() {
         >
           {loading ? "Updating..." : "Update"}
         </button>
-        {/* <Link className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95" >
+        <Link to={"/create-listing"} className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95" >
           Create Listing
-        </Link> */}
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span
