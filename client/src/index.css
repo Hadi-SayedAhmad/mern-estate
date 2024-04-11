@@ -5,3 +5,19 @@
 body{
     background-color: rgb(241, 245, 241);
 }
+
+/* Custom styles for navigation arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ffffff; /* White color */
+}
+
+/* Custom styles for pagination dots */
+.swiper-pagination-bullet {
+  background-color: #ffffff; /* White color */
+}
+
+/* Custom styles for active pagination dot */
+.swiper-pagination-bullet-active {
+  background-color: #ffffff; /* White color */
+}
