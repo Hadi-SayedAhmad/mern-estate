@@ -113,6 +113,7 @@ export default function CreateListing() {
       e.target.id === "furnished" ||
       e.target.id === "offer"
     ) {
+      
       setFormData({
         ...formData,
         [e.target.id]: e.target.checked,
@@ -328,7 +329,7 @@ export default function CreateListing() {
           <p className="font-semibold">
             Images:
             <span className="font-normal text-gray-600 ml-2">
-              The first image will be the cover. (max 6)
+              The first image will be the cover. (max 6) <br/>Please upload images before creating the listing.
             </span>
           </p>
           <div className="flex gap-4">
