@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const sendEmail = async (newUser, token) => {
-  const url = `http://localhost:3000/api/auth/confirmation/${token}`;
+  const url = `https://mern-estate-9g9x.onrender.com/api/auth/confirmation/${token}`;
   const output = `
 		<p>Verify your email address for Estate Platform</p>
 		<h3>Your sign up details are: </h3>
