@@ -11,6 +11,7 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import UpdateListing from "./pages/UpdateListing.jsx";
 import Listing from "./pages/Listing.jsx";
 import Search from "./pages/Search.jsx";
+import Footer from "./pages/Footer.jsx";
 export default function App() {
   return (
     <BrowserRouter>
@@ -28,7 +29,7 @@ export default function App() {
             <Route path="/update-listing/:id" element={<UpdateListing />} />
           </Route>
         </Routes>
-      
+      <Footer />
     </BrowserRouter>
   );
 }
