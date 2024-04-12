@@ -33,7 +33,7 @@ function SignUp() {
       }
       setLoading(false);
       setError(null);
-      navigate('/sign-in')
+      navigate("/sign-in");
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -55,6 +55,9 @@ function SignUp() {
           id="username"
           onChange={handleChange}
         />
+        <p className="text-sm text-blue-600 ps-2">
+          Your username should not contain spaces.
+        </p>
         <input
           type="email"
           placeholder="Email"
@@ -62,6 +65,9 @@ function SignUp() {
           id="email"
           onChange={handleChange}
         />
+        <p className="text-sm text-blue-600 ps-2">
+          Your email should be valid.
+        </p>
         <input
           type="password"
           placeholder="Password"
@@ -69,6 +75,10 @@ function SignUp() {
           id="password"
           onChange={handleChange}
         />
+        <p className="text-sm text-blue-600 ps-2">
+          Your password should be at least 8 characters containing at least 1
+          capital letter and a symbol.
+        </p>
         <button
           disabled={loading}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
@@ -76,6 +86,11 @@ function SignUp() {
           {loading ? "Loading..." : "Sign Up"}
         </button>
         <OAuth />
+        <p>
+          Once you sign up, an email will be sent to you so you can confirm your
+          email... Please confirm your email within <b>1 day</b> before trying
+          to sign in.
+        </p>
       </form>
       <div className="flex gap-2 mt-5">
         <p>Already have an account?</p>
