@@ -69,7 +69,7 @@ export const updateUser = async (req, res, next) => {
             "Your account was updated successfully! Please confirm your new email before trying to login again."
           );
       } else {
-        const {password, ...rest} = updateUser;
+        const {password, ...rest} = updateUser._doc;
         res.status(201).json(rest);
       }
     }
