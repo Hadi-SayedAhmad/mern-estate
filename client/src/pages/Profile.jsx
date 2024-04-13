@@ -214,6 +214,9 @@ export default function Profile() {
           id="username"
           onChange={handleChange}
         />
+        <p className="text-sm text-blue-600 ps-2">
+          Your username should not contain spaces.
+        </p>
         <input
           defaultValue={currentUser.email}
           type="email"
@@ -222,6 +225,9 @@ export default function Profile() {
           id="email"
           onChange={handleChange}
         />
+        <p className="text-sm text-blue-600 ps-2">
+          Your email should be valid.
+        </p>
         <input
           type="password"
           placeholder="Password"
@@ -229,6 +235,10 @@ export default function Profile() {
           id="password"
           onChange={handleChange}
         />
+        <p className="text-sm text-blue-600 ps-2">
+          Your password should be at least 8 characters containing at least 1
+          capital letter and a symbol.
+        </p>
         <button
           disabled={loading}
           className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
@@ -259,6 +269,10 @@ export default function Profile() {
           Sign Out
         </span>
       </div>
+      <p className="text-sm text-blue-600 ps-2">
+          Note: If you update the email, an email will be sent to the new address, so it can be verified. Please confirm your email within <b>1 day</b>, so you don't lose your account before trying
+          to sign in again.
+        </p>
       <p className="text-red-700 mt-5">{error && error}</p>
       <p className="text-green-700 mt-5">
         {updateSuccess && "Your profile has been updated successfully!"}

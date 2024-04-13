@@ -86,8 +86,8 @@ function SignUp() {
           {loading ? "Loading..." : "Sign Up"}
         </button>
         <OAuth />
-        <p>
-          Once you sign up, an email will be sent to you so you can confirm your
+        <p className="text-sm text-blue-600 ps-2">
+          Note: Once you sign up, an email will be sent to you so you can confirm your
           email... Please confirm your email within <b>1 day</b> before trying
           to sign in.
         </p>
