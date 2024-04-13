@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 import Listing from "../models/listing.model.js";
 import sendEmail from "../utils/nodemailer.js";
 import jwt from "jsonwebtoken";
-
+import validator from "validator";
 export const updateUser = async (req, res, next) => {
   if (req.user && req.user.id != req.params.id) {
     return next(errorHandler(401, "You can only update your own account!"));
