@@ -81,7 +81,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       let same = false;
-      if (formData.email && formData.email == currentUser.email) {
+      if (formData.email === undefined) {
         same = true;
       }
       console.log(formData.email);
