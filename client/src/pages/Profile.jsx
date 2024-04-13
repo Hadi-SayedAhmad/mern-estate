@@ -80,7 +80,7 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const same = false;
+      let same = false;
       if (formData.email && formData.email == currentUser.email) {
         same = true;
       }
