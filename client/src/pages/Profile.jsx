@@ -84,6 +84,8 @@ export default function Profile() {
       if (formData.email && formData.email == currentUser.email) {
         same = true;
       }
+      console.log(formData.email);
+      console.log(currentUser.email);
       dispatch(updateUserStart());
       const call = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
