@@ -28,10 +28,10 @@ const userSlice = createSlice({
             state.loading = true
         },
         updateUserSuccess: (state, action) => {
-            state.currentUser = action.payload,
+            localStorage.setItem("currentUser", JSON.stringify(null));
+            state.currentUser = null
             state.loading = false
-            state.error = null
-            localStorage.setItem("currentUser", JSON.stringify(state.currentUser))
+            state.error = false
         },
         updateUserFailure: (state, action) => {
             state.error = action.payload
