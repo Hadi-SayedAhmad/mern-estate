@@ -50,8 +50,10 @@ export const updateUser = async (req, res, next) => {
           new: true,
         }
       );
+      
       if (req.body.email) {
         updateUser.confirmed = false;
+        await updateUser.save();
         const tokenToConfirmEmail = jwt.sign(
           { id: updateUser._id },
           process.env.JWT_SECRET,
