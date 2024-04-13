@@ -67,7 +67,8 @@ export const updateUser = async (req, res, next) => {
             "Your account was updated successfully! Please confirm your new email before trying to login again."
           );
       } else {
-        res.status(201).json("Your account was updated successfully!");
+        const {password, ...rest} = updateUser;
+        res.status(201).json(rest);
       }
     }
   } catch (error) {
