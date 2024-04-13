@@ -105,6 +105,7 @@ export default function Profile() {
         setFormData({});
       } else {
         dispatch(updateUserSuccessWithEmail());
+        setFormData({});
       }
     } catch (error) {
       dispatch(updateUserFailure(error.message));
