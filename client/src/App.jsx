@@ -12,6 +12,13 @@ import UpdateListing from "./pages/UpdateListing.jsx";
 import Listing from "./pages/Listing.jsx";
 import Search from "./pages/Search.jsx";
 import Footer from "./pages/Footer.jsx";
+import ReactGA from 'react-ga4'
+
+ReactGA.initialize("G-73S0VG1ZYR");
+ReactGA.send({
+  hitType: "pageview",
+  page: window.location.pathname,
+})
 export default function App() {
   return (
     <BrowserRouter>
